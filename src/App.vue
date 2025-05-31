@@ -245,7 +245,6 @@ function scrollToTop() {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #121212;
   color: #f5f5f5;
   line-height: 1.6;
