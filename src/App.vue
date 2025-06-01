@@ -1,21 +1,54 @@
-
 <script setup>
-import { ref, onMounted, computed, onUnmounted, watch } from 'vue';
 import ModalDetails from './components/ModalDetails.vue';
+import Pagination from './components/Pagination.vue';
 
 const selectedCharacter = ref({});
 const isModalOpen = ref(false);
 const isSearchModalOpen = ref(false);
 const extraCharacter = ref(null);
 const noResultsFound = ref(false);
-const searchQuery = ref('');
-const searchHistory = ref([]);
 const characters = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(1);
 const recentCharacter = ref({});
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
-function openModal(character) { 
+const searchQuery = ref('');
+const searchHistory = ref([]);
+const isHistoryVisible = ref(false);
+
+function selectFromHistory(term) {
+  searchQuery.value = term;
+  isHistoryVisible.value = false;
+  useHistoryTerm(term);
+}
+
+const filteredHistory = computed(() => {
+  const query = searchQuery.value.toLowerCase();
+  return searchHistory.value.filter((term) =>
+    term.toLowerCase().includes(query)
+  );
+});
+
+function handleClickOutside(event) {
+  if (!event.target.closest('.search-wrapper')) {
+    isHistoryVisible.value = false;
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+  const storedHistory = localStorage.getItem('searchHistory');
+  if (storedHistory) {
+    searchHistory.value = JSON.parse(storedHistory);
+  }
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
+
+function openModal(character) {
   if (!character || !character.name) return;
   selectedCharacter.value = character;
   isModalOpen.value = true;
@@ -91,7 +124,7 @@ onMounted(() => {
   const storedRecent = localStorage.getItem('recentCharacter');
   if (storedRecent) {
     recentCharacter.value = JSON.parse(storedRecent);
-  }else {
+  } else {
     recentCharacter.value = {};
   }
 });
@@ -101,10 +134,6 @@ onUnmounted(() => {
   localStorage.setItem('recentCharacter', JSON.stringify(recentCharacter.value));
 });
 
-watch(currentPage, (newPage) => {
-  localStorage.setItem('currentPage', newPage.toString());
-  fetchCharacters(newPage);
-});
 
 async function useHistoryTerm(term) {
   if (!term) return;
@@ -130,35 +159,10 @@ async function useHistoryTerm(term) {
   }
 }
 
-function nextPage() {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-    scrollToTop();
-  }
-}
-
-function prevPage() {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-    scrollToTop();
-  }
-}
-function home() {
-currentPage.value = 1;
-  fetchCharacters(currentPage.value);
-  scrollToTop();
-}
-
-function end() {
-  currentPage.value = totalPages.value;
-  fetchCharacters(currentPage.value);
-  scrollToTop();
-}
-function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth' // Puedes usar 'auto' si no quieres animación
-  });
+function changePage(page) {
+  currentPage.value = page;
+  fetchCharacters(page);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 </script>
@@ -168,7 +172,7 @@ function scrollToTop() {
     <div class="navbar-content">
       <h1 class="navbar-title">Rick and Morty Gallery</h1>
 
-      <div @click="openSearchModal(searchQuery)" class="search-history-container">
+      <!-- <div @click="openSearchModal(searchQuery)" class="search-history-container">
         <p>Historial de busqueda</p>
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
           <path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
@@ -193,20 +197,35 @@ function scrollToTop() {
             <path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
           </svg>
         </button>
+      </div> -->
+      <div class="search-wrapper">
+        <input type="text" placeholder="Buscar..." class="search-input" v-model="searchQuery"
+          @focus="isHistoryVisible = true" @input="isHistoryVisible = true" />
+        <button class="close-searchHistory" @click="closeSearchModal">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
+          </svg>
+        </button>
+        <ul v-if="isHistoryVisible && filteredHistory.length" class="search-history-dropdown">
+          <li v-for="(term, index) in filteredHistory" :key="index" @click="selectFromHistory(term)">
+            {{ term }}
+          </li>
+        </ul>
       </div>
 
       <div v-if="recentCharacter?.name">
         <p>Personaje visto recientemente:</p>
         <div class="character-card" @click="openModal(recentCharacter)">
-          <h2>{{ recentCharacter.name }}</h2>
+          <h2 class="recent-character-name">{{ recentCharacter.name }}</h2>
         </div>
       </div>
     </div>
   </nav>
 
-  <main>
+  <main class="main-content">
     <div v-if="extraCharacter && !isSearchModalOpen" @click="openModal(extraCharacter)" class="extra-character">
-      <div class="character-card">
+      <div class="character-card glow-pointer">
         <img :src="extraCharacter.image" :alt="extraCharacter.name" />
         <h2>{{ extraCharacter.name }}</h2>
         <p>{{ extraCharacter.species }}</p>
@@ -228,13 +247,8 @@ function scrollToTop() {
 
     <ModalDetails :character="selectedCharacter" :isModalOpen="isModalOpen" @close="isModalOpen = false" />
 
-    <div v-if="!isSearchModalOpen && filteredCharacters.length > 2" class="pagination">
-      <button @click="home" :disabled="currentPage === 1"><<<</button>
-      <button @click="prevPage" :disabled="currentPage === 1">Anterior</button>
-      <span>Página {{ currentPage }} de {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
-      <button @click="end" :disabled="currentPage === totalPages">>>></button>
-    </div>
+    <Pagination v-if="!isSearchModalOpen && filteredCharacters.length > 2" :currentPage="currentPage"
+      :totalPages="totalPages" @change-page="changePage" />
   </main>
 </template>
 <style scoped>
@@ -251,81 +265,90 @@ body {
 }
 
 /* Navbar */
+
 .navbar {
-  background: #1f1f1f;
-  padding: 1rem 2rem;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 10;
-  flex-wrap: wrap;
+  left: 0;
+  width: 100%;
+  background-color: #1f1f1f;
+  color: white;
+  z-index: 1000;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
 }
 
-.navbar-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.search-container {
+.navbar-content {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .search-input {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: none;
-  width: 200px;
-  max-width: 100%;
-  background: #2b2b2b;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  outline: none;
+  background-color: #222;
   color: #fff;
 }
 
-.search-input::placeholder {
-  color: #aaa;
+.search-history-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #2b2b2b;
+  border: 1px solid #444;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  z-index: 20;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.search-history-dropdown li {
+  padding: 10px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.search-history-dropdown li:hover {
+  background: #444;
 }
 
 .close-searchHistory {
+  position: absolute;
+  top: 7px;
+  right: 8px;
   background: none;
   border: none;
   cursor: pointer;
   color: #fff;
 }
 
-.search-history-container {
-  position: relative;
-  cursor: pointer;
-}
-
-.search-history {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  background: #2a2a2a;
-  border-radius: 6px;
-  padding: 0.5rem 0;
-  width: 200px;
-  max-height: 200px;
-  overflow-y: auto;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  z-index: 99;
-}
-
-.search-history li {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.search-history li:hover {
-  background-color: #3a3a3a;
-}
-
 /* Main Content */
-main {
+
+.main-content {
   padding: 2rem 1rem;
-  max-width: 1200px;
   margin: auto;
+  width: 200vw;
+  max-width: 1600px;
 }
 
 .character-grid {
@@ -333,13 +356,10 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(180px, 250px));
   gap: 24px;
   justify-content: center;
-  /* o center */
   padding: 20px;
-  margin: 0 auto;
-  width: 90vw;
-  /* Asegura que ocupe el ancho total de la ventana */
-  max-width: 100%;
-  /* No se desborda */
+  margin-top: 80px;
+  width: 200vw;
+  max-width: 1600px;
   box-sizing: border-box;
 }
 
@@ -370,7 +390,10 @@ main {
   margin: 5px 0 10px 0;
 }
 
-
+.recent-character-name {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
 
 .extra-character {
   display: flex;
@@ -378,41 +401,15 @@ main {
   margin-top: 20px;
 }
 
-
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-}
-
-.pagination button {
-  background: #282828;
-  color: #fff;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.pagination button:hover {
-  background-color: #3b3b3b;
-}
-
-.pagination button:disabled {
-  background: #444;
-  cursor: not-allowed;
-}
-
 @media (max-width: 600px) {
   .navbar {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .main-content {
+    max-width: fit-content;
   }
 
   .search-input {

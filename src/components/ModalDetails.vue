@@ -15,12 +15,14 @@ const emit = defineEmits(['close']);
             <h1 class="character-name">{{ character.name }}</h1>
             <p><strong>Género:</strong> {{ character.gender }}</p>
             <p><strong>Estado:</strong> {{ character.status }}</p>
+            <p><strong>Espécie:</strong> {{ character.species }}</p>
             <p><strong>Ubicación:</strong> {{ character.location?.name }}</p>
         </div>
     </div>
 </template>
 
 <style scoped>
+
 .modal-overlay {
     position: fixed;
     inset: 0;
