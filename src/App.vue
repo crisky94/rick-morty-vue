@@ -358,7 +358,7 @@ body {
   justify-content: center;
   padding: 20px;
   margin-top: 80px;
-  width: 200vw;
+  width: 1600vw;
   max-width: 1600px;
   box-sizing: border-box;
 }
