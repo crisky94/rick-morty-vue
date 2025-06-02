@@ -32,13 +32,14 @@ function nextPage() {
         <button @click="home" :disabled="currentPage === 1">
             <<< </button>
                 <button @click="prevPage" :disabled="currentPage === 1">Anterior</button>
-                <span>Página {{ currentPage }} de {{ totalPages }}</span>
+                <span class="page-info">Página {{ currentPage }} de {{ totalPages }}</span>
                 <button @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
                 <button @click="end" :disabled="currentPage === totalPages">>>></button>
     </div>
 </template>
 <style scoped>
 .pagination {
+    color:white;
     display: flex;
     justify-content: center;
     gap: 1rem;
@@ -46,6 +47,10 @@ function nextPage() {
     flex-wrap: wrap;
     width: 100%;
     max-width: 1600px;
+}
+
+.pagination .page-info {
+    margin-top: 6px;
 }
 
 .pagination button {
