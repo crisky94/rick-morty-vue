@@ -624,10 +624,11 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 15px;
   justify-content: center;
-  padding: 10px;
+  padding: 55px;
   width: 100%;
   max-width: 1500px;
   box-sizing: border-box;
+  margin-top: 100px;
 }
 
 .character-card {
