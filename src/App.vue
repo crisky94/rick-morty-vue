@@ -259,11 +259,12 @@ function toggleHistory() {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   background-color: #1f1f1f;
   color: white;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
+  overflow: hidden;
 }
 
 .navbar-content {
