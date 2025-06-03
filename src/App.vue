@@ -355,11 +355,11 @@ function toggleHistory() {
 /* Main Content */
 
 .main-content {
-  padding: 2rem 1rem;
-  margin: auto;
   width: 100%;
   height: 100%;
-  max-width: 1600px;
+  background-color: #111;
+  padding: 2rem 1rem;
+  margin: auto;
   box-sizing: border-box;
 }
 
