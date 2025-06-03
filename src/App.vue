@@ -525,9 +525,8 @@ body {
 
 .search-wrapper {
   position: relative;
-  /* Reducimos el ancho máximo para pantallas muy pequeñas */
-  width: 80%; /* Ajustado de 90% a 80% */
-  max-width: 250px; /* Reducido de 300px a 250px */
+  width: 80%;
+  max-width: 250px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -628,7 +627,7 @@ body {
   width: 100%;
   max-width: 1500px;
   box-sizing: border-box;
-  margin-top: 80px;
+  margin-top: 65px;
 }
 
 .character-card {
@@ -706,7 +705,7 @@ body {
 
   .search-wrapper {
     width: auto;
-    max-width: 300px; /* Volvemos al ancho original para pantallas más grandes */
+    max-width: 300px;
     flex-direction: row;
     align-items: center;
     gap: 0;
