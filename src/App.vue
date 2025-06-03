@@ -251,19 +251,12 @@ function toggleHistory() {
       :totalPages="totalPages" @change-page="changePage" />
   </main>
 </template>
-<style scoped>
+<style>
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
-body {
-  background-color: #121212;
-  color: #f5f5f5;
-  line-height: 1.6;
-}
-
 /* Navbar */
 
 .navbar {
