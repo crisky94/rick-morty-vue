@@ -228,8 +228,8 @@ function toggleHistory() {
       </div>
       <div v-if="recentCharacter?.name">
         <p>Personaje visto recientemente:</p>
-        <div class="character-card" @click="openModal(recentCharacter)">
-          <h2 class="recent-character-name">{{ recentCharacter.name }}</h2>
+        <div @click="openModal(recentCharacter)">
+          <h2>{{ recentCharacter.name }}</h2>
         </div>
       </div>
     </div>
@@ -259,20 +259,22 @@ function toggleHistory() {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   background-color: #1f1f1f;
   color: white;
   z-index: 1000;
-  padding: 1rem 2rem;
   box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
 }
 
 .navbar-content {
+  width: 100%;
+  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 900px;
   margin: auto;
+  flex-wrap: wrap;
 }
 
 .search-wrapper {
@@ -376,6 +378,7 @@ function toggleHistory() {
 
 .character-card {
   width: 180px;
+  height: 250px;
   border-radius: 8px;
   text-align: center;
   background: none;
@@ -403,6 +406,8 @@ function toggleHistory() {
 .recent-character-name {
   cursor: pointer;
   transition: color 0.2s ease;
+  color:white;
+  overflow-wrap: anywhere;
 }
 
 .extra-character {
