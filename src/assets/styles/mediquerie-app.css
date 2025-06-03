@@ -1,0 +1,144 @@
+/* Media Queries for Responsiveness */
+/* Small devices (phones, 480px and up) */
+@media (min-width: 480px) {
+    .navbar-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+
+    .navbar-title {
+        font-size: 1.8em;
+    }
+
+    .search-wrapper {
+        width: auto;
+        max-width: 300px;
+        flex-direction: row;
+        align-items: center;
+        gap: 0;
+    }
+
+    .search-input {
+        font-size: 14px;
+        padding: 10px;
+        border-radius: 6px 0 0 6px;
+    }
+
+    .search-buttons {
+        justify-content: center;
+        border-radius: 0 6px 6px 0;
+        border-left: none;
+        margin-bottom: 0;
+    }
+
+    .search-history-dropdown {
+        max-height: 200px;
+        top: 100%;
+    }
+
+    .search-history-dropdown li {
+        font-size: 1em;
+        padding: 10px;
+    }
+
+    .recent-character-name {
+        font-size: 1em;
+    }
+
+    .main-content {
+        padding: 20px 20px;
+        margin-top: 80px;
+    }
+
+    .character-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .character-card {
+        width: 160px;
+        padding: 15px;
+    }
+
+    .character-card img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .character-card h2 {
+        font-size: 1.1em;
+    }
+
+    .character-card p {
+        font-size: 0.9em;
+    }
+
+    .glow-pointer {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .navbar-content {
+        padding: 20px 40px;
+    }
+
+    .navbar-title {
+        font-size: 2.2em;
+    }
+
+    .search-input {
+        font-size: 16px;
+    }
+
+    .character-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .character-card {
+        width: 180px;
+    }
+
+    .character-card img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .character-card h2 {
+        font-size: 1.2em;
+    }
+
+    .character-card p {
+        font-size: 1em;
+    }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+    .navbar-content {
+        padding: 20px 60px;
+    }
+
+    .navbar-title {
+        font-size: 2.5em;
+    }
+
+    .character-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 25px;
+    }
+
+    .character-card {
+        width: 200px;
+    }
+
+    .character-card img {
+        width: 140px;
+        height: 140px;
+    }
+}

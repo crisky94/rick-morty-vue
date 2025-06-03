@@ -2,7 +2,8 @@
 import ModalDetails from './components/ModalDetails.vue';
 import Pagination from './components/Pagination.vue';
 import Navbar from './components/Navbar.vue';
-import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
+import "./assets/styles/mediquerie-app.css"
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 
 const selectedCharacter = ref({});
 const extraCharacter = ref(null);
@@ -18,20 +19,6 @@ const isModalOpen = ref(false);
 const isSearchModalOpen = ref(false);
 const isHistoryVisible = ref(false);
 const noResultsFound = ref(false);
-
-
-// const filteredHistory = computed(() => {
-//   const query = searchQuery.value.toLowerCase();
-//   return searchHistory.value.filter((term) =>
-//     term.toLowerCase().includes(query)
-//   );
-// });
-
-// function handleClickOutside(event) {
-//   if (!event.target.closest('.search-wrapper')) {
-//     isHistoryVisible.value = false;
-//   }
-// }
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
@@ -194,48 +181,9 @@ async function changePage(page) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// function toggleHistory() {
-//   isHistoryVisible.value = !isHistoryVisible.value;
-// }
 </script>
 
 <template>
-  <!-- <nav class="navbar">
-
-    <div class="navbar-content">
-      <h1 class="navbar-title">Rick and Morty Gallery</h1>
-      <div class="search-wrapper">
-        <input type="text" placeholder="Buscar..." class="search-input" v-model="searchQuery"
-          @input="isHistoryVisible = true" @focus="isHistoryVisible = true" />
-        <div class="search-buttons">
-          <button class="history-btn" @click="toggleHistory" title="Mostrar historial">
-            <button class="close-searchHistory" @click="closeSearchModal" title="Cerrar búsqueda">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                fill="#e8eaed">
-                <path
-                  d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
-              </svg>
-            </button>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ccc" viewBox="0 0 24 24">
-              <path
-                d="M13 3a9 9 0 1 0 8.9 10h-2.02A7 7 0 1 1 13 5v2l3-3-3-3v2zm1 5h-1v5l4.28 2.54.72-1.21-3.5-2.08V8z" />
-            </svg>
-          </button>
-        </div>
-        <ul v-if="isHistoryVisible && !searchQuery" class="search-history-dropdown">
-          <li v-for="(term, idx) in filteredHistory" :key="idx" @click="useHistoryTerm(term)" style="cursor:pointer;">
-            {{ term }}
-          </li>
-        </ul>
-      </div>
-      <div v-if="recentCharacter?.name">
-        <p>Personaje visto recientemente:</p>
-        <div class="character-card" @click="openModal(recentCharacter)">
-          <h2 class="recent-character-name">{{ recentCharacter.name }}</h2>
-        </div>
-      </div>
-    </div>
-  </nav> -->
   <Navbar
     v-model:searchQuery="searchQuery"
     :searchHistory="searchHistory"
@@ -270,119 +218,6 @@ body {
   background-color: #222;
   color: white;
 }
-
-/* Navbar */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #1f1f1f;
-  color: white;
-  z-index: 1000;
-  padding: 10px;
-  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
-}
-
-.navbar-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.navbar-title {
-  font-size: 1.5em;
-  margin-bottom: 5px;
-}
-
-.search-wrapper {
-  position: relative;
-  width: 80%;
-  max-width: 250px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 5px;
-}
-
-.search-input {
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #555;
-  border-radius: 6px;
-  outline: none;
-  background-color: #222;
-  color: #fff;
-  width: auto;
-}
-
-.search-buttons {
-  display: flex;
-  justify-content: flex-end;
-  background-color: #222;
-  border: 1px solid #555;
-  border-radius: 6px;
-  width: 24%;
-  margin-bottom: 5px;
-}
-
-.search-buttons button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ccc;
-}
-
-.search-history-dropdown {
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0;
-  right: 0;
-  background: #2b2b2b;
-  border: 1px solid #444;
-  border-radius: 0 0 6px 6px;
-  z-index: 20;
-  max-height: 150px;
-  overflow-y: auto;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.search-history-dropdown li {
-  padding: 8px;
-  cursor: pointer;
-  color: #fff;
-  font-size: 0.9em;
-}
-
-.search-history-dropdown li:hover {
-  background: #444;
-}
-
-.search-buttons button:hover {
-  color: #0f0;
-}
-
-.close-searchHistory svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* Recent Character */
-.recent-character-name {
-  cursor: pointer;
-  transition: color 0.2s ease;
-  font-size: 0.9em;
-}
-
 /* Main Content */
 .main-content {
   padding: 20px 10px;
@@ -461,151 +296,5 @@ body {
   box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88;
   background: #000;
   transform: scale(1.03);
-}
-
-/* Media Queries for Responsiveness */
-
-/* Small devices (phones, 480px and up) */
-@media (min-width: 480px) {
-  .navbar-content {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-  }
-
-  .navbar-title {
-    font-size: 1.8em;
-  }
-
-  .search-wrapper {
-    width: auto;
-    max-width: 300px;
-    flex-direction: row;
-    align-items: center;
-    gap: 0;
-  }
-
-  .search-input {
-    font-size: 14px;
-    padding: 10px;
-    border-radius: 6px 0 0 6px;
-  }
-
-  .search-buttons {
-    justify-content: center;
-    border-radius: 0 6px 6px 0;
-    border-left: none;
-    margin-bottom: 0;
-  }
-
-  .search-history-dropdown {
-    max-height: 200px;
-    top: 100%;
-  }
-
-  .search-history-dropdown li {
-    font-size: 1em;
-    padding: 10px;
-  }
-
-  .recent-character-name {
-    font-size: 1em;
-  }
-
-  .main-content {
-    padding: 20px 20px;
-    margin-top: 80px;
-  }
-
-  .character-grid {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 20px;
-    padding: 20px;
-  }
-
-  .character-card {
-    width: 160px;
-    padding: 15px;
-  }
-
-  .character-card img {
-    width: 100px;
-    height: 100px;
-  }
-
-  .character-card h2 {
-    font-size: 1.1em;
-  }
-
-  .character-card p {
-    font-size: 0.9em;
-  }
-
-  .glow-pointer {
-    padding: 10px 20px;
-    font-size: 1em;
-  }
-}
-
-/* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) {
-  .navbar-content {
-    padding: 20px 40px;
-  }
-
-  .navbar-title {
-    font-size: 2.2em;
-  }
-
-  .search-input {
-    font-size: 16px;
-  }
-
-  .character-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  }
-
-  .character-card {
-    width: 180px;
-  }
-
-  .character-card img {
-    width: 120px;
-    height: 120px;
-  }
-
-  .character-card h2 {
-    font-size: 1.2em;
-  }
-
-  .character-card p {
-    font-size: 1em;
-  }
-}
-
-/* Large devices (desktops, 1024px and up) */
-@media (min-width: 1024px) {
-  .navbar-content {
-    padding: 20px 60px;
-  }
-
-  .navbar-title {
-    font-size: 2.5em;
-  }
-
-  .character-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 25px;
-  }
-
-  .character-card {
-    width: 200px;
-  }
-
-  .character-card img {
-    width: 140px;
-    height: 140px;
-  }
 }
 </style>
