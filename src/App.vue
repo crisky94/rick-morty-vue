@@ -628,7 +628,7 @@ body {
   width: 100%;
   max-width: 1500px;
   box-sizing: border-box;
-  margin-top: 100px;
+  margin-top: 80px;
 }
 
 .character-card {
