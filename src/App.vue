@@ -356,6 +356,7 @@ function toggleHistory() {
   padding: 2rem 1rem;
   margin: auto;
   width: 100%;
+  height: 100%;
   max-width: 1600px;
   box-sizing: border-box;
 }
@@ -368,6 +369,7 @@ function toggleHistory() {
   padding: 24px;
   margin-top: 80px;
   width: 100%;
+  height: auto;
   max-width: 1500px;
   box-sizing: border-box;
 }
