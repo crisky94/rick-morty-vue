@@ -42,8 +42,8 @@ function nextPage() {
     color:white;
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
+    gap: 10px;
+    margin-top: 20px;
     flex-wrap: wrap;
     width: 100%;
     max-width: 1600px;
@@ -57,7 +57,7 @@ function nextPage() {
     background: #282828;
     color: #fff;
     border: none;
-    padding: 0.6rem 1.2rem;
+    padding: 6px 12px;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s ease;

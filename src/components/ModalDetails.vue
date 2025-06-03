@@ -31,13 +31,13 @@ const emit = defineEmits(['close']);
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.5);
-    padding: 1rem;
+    padding: 10px;
 }
 
 .modal-content {
     background-color: #f9fafb;
-    border-radius: 1rem;
-    padding: 2rem;
+    border-radius: 10px;
+    padding: 20px;
     max-width: 30vw;
     width: 100%;
     max-height: 90vh;
@@ -53,25 +53,25 @@ const emit = defineEmits(['close']);
 @media (max-width: 1024px) {
     .modal-content {
         max-width: 60vw;
-        padding: 1.5rem;
+        padding: 15px;
     }
 }
 
 @media (max-width: 768px) {
     .modal-content {
         max-width: 90vw;
-        padding: 1.25rem;
+        padding: 10px;
     }
 }
 
 @media (max-width: 480px) {
     .modal-content {
         max-width: 98vw;
-        padding: 1rem;
+        padding: 10px;
     }
 
     .character-name {
-        font-size: 1.1rem;
+        font-size: 18px;
     }
 
     .character-image {
@@ -85,22 +85,22 @@ const emit = defineEmits(['close']);
     height: 100px;
     object-fit: cover;
     border-radius: 9999px;
-    margin: 0 auto 1rem auto;
+    margin: 0 auto 10px auto;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .character-name {
-    font-size: 1.5rem;
+    font-size: 15px;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
     color: #1f2937;
 }
 
 .close-button {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 1.2rem;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
     background: transparent;
     border: none;
     cursor: pointer;
