@@ -37,21 +37,21 @@ body {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 1rem;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.2;
   margin-bottom: 0.75rem;
 }
 
 h3 {
-  font-size: 1.25rem;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.2;
   margin-bottom: 0.5rem;
