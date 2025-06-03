@@ -228,8 +228,8 @@ function toggleHistory() {
       </div>
       <div v-if="recentCharacter?.name">
         <p>Personaje visto recientemente:</p>
-        <div @click="openModal(recentCharacter)">
-          <h2>{{ recentCharacter.name }}</h2>
+        <div class="character-card" @click="openModal(recentCharacter)">
+          <h2 class="recent-character-name">{{ recentCharacter.name }}</h2>
         </div>
       </div>
     </div>
@@ -251,7 +251,18 @@ function toggleHistory() {
       :totalPages="totalPages" @change-page="changePage" />
   </main>
 </template>
-<style>
+<style scoped>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #121212;
+  color: #f5f5f5;
+  line-height: 1.6;
+}
 
 /* Navbar */
 
@@ -263,19 +274,16 @@ function toggleHistory() {
   background-color: #1f1f1f;
   color: white;
   z-index: 1000;
+  padding: 1rem 2rem;
   box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
-  overflow: hidden;
 }
 
 .navbar-content {
-  width: 100%;
-  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 900px;
+  max-width: 1200px;
   margin: auto;
-  flex-wrap: wrap;
 }
 
 .search-wrapper {
@@ -356,11 +364,10 @@ function toggleHistory() {
 /* Main Content */
 
 .main-content {
-  width: 100%;
-  height: 100%;
-  background-color: #111;
   padding: 2rem 1rem;
   margin: auto;
+  width: 100%;
+  max-width: 1600px;
   box-sizing: border-box;
 }
 
@@ -372,14 +379,12 @@ function toggleHistory() {
   padding: 24px;
   margin-top: 80px;
   width: 100%;
-  height: 100%;
   max-width: 1500px;
   box-sizing: border-box;
 }
 
 .character-card {
   width: 180px;
-  height: 250px;
   border-radius: 8px;
   text-align: center;
   background: none;
@@ -407,8 +412,6 @@ function toggleHistory() {
 .recent-character-name {
   cursor: pointer;
   transition: color 0.2s ease;
-  color:white;
-  overflow-wrap: anywhere;
 }
 
 .extra-character {
