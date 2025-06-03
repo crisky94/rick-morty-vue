@@ -1,27 +1,23 @@
 <script setup>
 import ModalDetails from './components/ModalDetails.vue';
 import Pagination from './components/Pagination.vue';
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 
 const selectedCharacter = ref({});
-const isModalOpen = ref(false);
-const isSearchModalOpen = ref(false);
 const extraCharacter = ref(null);
-const noResultsFound = ref(false);
 const characters = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(1);
 const recentCharacter = ref({});
-import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
-
+const filteredCharacters = ref([]);
 const searchQuery = ref('');
 const searchHistory = ref([]);
-const isHistoryVisible = ref(false);
 
-function selectFromHistory(term) {
-  searchQuery.value = term;
-  isHistoryVisible.value = false;
-  useHistoryTerm(term);
-}
+const isModalOpen = ref(false);
+const isSearchModalOpen = ref(false);
+const isHistoryVisible = ref(false);
+const noResultsFound = ref(false);
+
 
 const filteredHistory = computed(() => {
   const query = searchQuery.value.toLowerCase();
@@ -35,24 +31,6 @@ function handleClickOutside(event) {
     isHistoryVisible.value = false;
   }
 }
-
-// onMounted(() => {
-//   document.addEventListener('click', handleClickOutside);
-//   const storedHistory = localStorage.getItem('searchHistory');
-//   if (storedHistory) {
-//     searchHistory.value = JSON.parse(storedHistory);
-//   }
-// });
-// onMounted(async () => {
-//   const storedPage = localStorage.getItem('currentPage');
-//   if (storedPage) {
-//     currentPage.value = parseInt(storedPage);
-//   }
-
-//   await fetchCharacters(currentPage.value);
-//   filteredCharacters.value = characters.value; // aquí
-// });
-
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
@@ -100,7 +78,6 @@ function saveSearchToHistory(term) {
   localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value));
 }
 
-
 const fetchCharacters = async (page) => {
   try {
     const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
@@ -112,17 +89,6 @@ const fetchCharacters = async (page) => {
     console.error('Error fetching characters:', error);
   }
 };
-
-// const filteredCharacters = computed(() => {
-//   const query = (searchQuery.value || '').toLowerCase();
-//   const results = characters.value.filter(character =>
-//     character.name.toLowerCase().includes(query)
-//   );
-//   noResultsFound.value = searchQuery.value && results.length === 0;
-//   return results;
-// });
-
-const filteredCharacters = ref([]);
 
 watch(searchQuery, async (newQuery) => {
   currentPage.value = 1;
@@ -148,7 +114,6 @@ watch(searchQuery, async (newQuery) => {
   }
 });
 
-
 onMounted(async () => {
   const storedPage = localStorage.getItem('currentPage');
   if (storedPage) {
@@ -156,7 +121,7 @@ onMounted(async () => {
   }
 
   await fetchCharacters(currentPage.value);
-filteredCharacters.value = characters.value;
+  filteredCharacters.value = characters.value;
   const storedHistory = localStorage.getItem('searchHistory');
   if (storedHistory) {
     searchHistory.value = JSON.parse(storedHistory);
@@ -174,7 +139,6 @@ onUnmounted(() => {
   localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value));
   localStorage.setItem('recentCharacter', JSON.stringify(recentCharacter.value));
 });
-
 
 async function useHistoryTerm(term) {
   if (!term) return;
@@ -229,149 +193,39 @@ async function changePage(page) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// function showNoResultsMessage() {
-//   noResultsFound.value = true
-
-//   // Ocultar después de 3 segundos
-//   setTimeout(() => {
-//     noResultsFound.value = false
-//   }, 2000)
-// }
 function toggleHistory() {
   isHistoryVisible.value = !isHistoryVisible.value;
 }
-
-
 </script>
 
 <template>
   <nav class="navbar">
     <div class="navbar-content">
       <h1 class="navbar-title">Rick and Morty Gallery</h1>
-      <!-- <div @click="openSearchModal(searchQuery)" class="search-history-container">
-        <p>Historial de busqueda</p>
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-          <path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
-        </svg>
-        <ul v-if="isSearchModalOpen" class="search-history">
-          <li v-for="(term, idx) in searchHistory" :key="idx" @click="useHistoryTerm(term)" style="cursor:pointer;">
-            {{ term }}
-          </li>
-        </ul>
-      </div>
-
-      <div class="search-container">
-        <input
-          type="text"
-          placeholder="Buscar..."
-          class="search-input"
-          v-model="searchQuery"
-          @blur="saveSearchToHistory(searchQuery)"
-        />
-        <button class="close-searchHistory" @click="closeSearchModal">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-            <path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
-          </svg>
-        </button>
-      </div> -->
-          <!-- <div>
-        <button class=""
-          @click="filteredHistory.length > 0 ? isHistoryVisible = !isHistoryVisible : null">
-          Historial de Búsqueda
-        </button>
-        <ul v-if="isHistoryVisible" class="search-history-dropdown">
+      <div class="search-wrapper">
+        <input type="text" placeholder="Buscar..." class="search-input" v-model="searchQuery"
+          @input="isHistoryVisible = true" @focus="isHistoryVisible = true" />
+        <div class="search-buttons">
+          <button class="history-btn" @click="toggleHistory" title="Mostrar historial">
+            <button class="close-searchHistory" @click="closeSearchModal" title="Cerrar búsqueda">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                fill="#e8eaed">
+                <path
+                  d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
+              </svg>
+            </button>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ccc" viewBox="0 0 24 24">
+              <path
+                d="M13 3a9 9 0 1 0 8.9 10h-2.02A7 7 0 1 1 13 5v2l3-3-3-3v2zm1 5h-1v5l4.28 2.54.72-1.21-3.5-2.08V8z" />
+            </svg>
+          </button>
+        </div>
+        <ul v-if="isHistoryVisible && !searchQuery" class="search-history-dropdown">
           <li v-for="(term, idx) in filteredHistory" :key="idx" @click="useHistoryTerm(term)" style="cursor:pointer;">
             {{ term }}
           </li>
         </ul>
-      </div> -->
-      <!-- <div class="search-wrapper">
-        <input type="text" placeholder="Buscar..." class="search-input" v-model="searchQuery"
-          @input="isHistoryVisible = true" @change="openSearchModal(searchQuery)" />
-        <button class="close-searchHistory" @click="closeSearchModal">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-            <path
-              d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
-          </svg>
-        </button>
-        <ul v-if="isSearchModalOpen" class="search-history-dropdown">
-          <li v-for="(term, index) in filteredCharacters" :key="index" @click="selectFromHistory(term.name)">
-            {{ term.name }}
-          </li>
-        </ul>
-      </div> -->
-      <!-- <div class="search-wrapper">
-  <input
-    type="text"
-    placeholder="Buscar..."
-    class="search-input"
-    v-model="searchQuery"
-    @input="isHistoryVisible = true"
-    @focus="isHistoryVisible = true"
-  />
-  <span class="search-icon" @click="toggleHistory">
-   
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ccc" viewBox="0 0 24 24">
-      <path d="M13 3a9 9 0 1 0 8.9 10h-2.02A7 7 0 1 1 13 5v2l3-3-3-3v2zm1 5h-1v5l4.28 2.54.72-1.21-3.5-2.08V8z"/>
-    </svg>
-  </span>
-  
-
-  <ul v-if="isHistoryVisible && !searchQuery" class="search-history-dropdown">
-    
-    <li
-    v-for="(term, idx) in filteredHistory"
-    :key="idx"
-    @click="useHistoryTerm(term)"
-    style="cursor:pointer;"
-    >
-    {{ term }}
-  </li>
-</ul>
-</div>
-<button class="close-searchHistory" @click="closeSearchModal">
-      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-        <path
-          d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
-      </svg>
-    </button> -->
-    <div class="search-wrapper">
-  <input
-    type="text"
-    placeholder="Buscar..."
-    class="search-input"
-    v-model="searchQuery"
-    @input="isHistoryVisible = true"
-    @focus="isHistoryVisible = true"
-  />
-  <div class="search-buttons">
-    <button class="close-searchHistory" @click="closeSearchModal" title="Cerrar búsqueda">
-      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-        <path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
-      </svg>
-    </button>
-    <button class="history-btn" @click="toggleHistory" title="Mostrar historial">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ccc" viewBox="0 0 24 24">
-        <path d="M13 3a9 9 0 1 0 8.9 10h-2.02A7 7 0 1 1 13 5v2l3-3-3-3v2zm1 5h-1v5l4.28 2.54.72-1.21-3.5-2.08V8z"/>
-      </svg>
-    </button>
-
-  </div>
-
-  <ul v-if="isHistoryVisible && !searchQuery" class="search-history-dropdown">
-    <li
-      v-for="(term, idx) in filteredHistory"
-      :key="idx"
-      @click="useHistoryTerm(term)"
-      style="cursor:pointer;"
-    >
-      {{ term }}
-    </li>
-  </ul>
-</div>
-
-
-
+      </div>
       <div v-if="recentCharacter?.name">
         <p>Personaje visto recientemente:</p>
         <div class="character-card" @click="openModal(recentCharacter)">
@@ -379,23 +233,8 @@ function toggleHistory() {
         </div>
       </div>
     </div>
-    <!-- <div>
-      <button class="" @click="openSearchModal(searchQuery)">
-        Buscar Personaje
-      </button>
-    </div> -->
-
   </nav>
-
   <main class="main-content">
-    <!-- <div v-if="extraCharacter && !isSearchModalOpen" @click="openModal(extraCharacter)" class="extra-character">
-      <div class="character-card glow-pointer">
-        <img :src="extraCharacter.image" :alt="extraCharacter.name" />
-        <h2>{{ extraCharacter.name }}</h2>
-        <p>{{ extraCharacter.species }}</p>
-      </div>
-    </div> -->
-
     <div class="character-grid">
       <div class="character-card glow-pointer" v-for="character in filteredCharacters" :key="character.id"
         @click="openModal(character)">
@@ -404,13 +243,10 @@ function toggleHistory() {
         <p>{{ character.species }}</p>
       </div>
     </div>
-
     <p v-if="noResultsFound" class="no-results-message">
       ❌ No se ha encontrado ningún personaje con ese nombre.
     </p>
-
     <ModalDetails :character="selectedCharacter" :isModalOpen="isModalOpen" @close="isModalOpen = false" />
-
     <Pagination v-if="!isSearchModalOpen && filteredCharacters.length > 2" :currentPage="currentPage"
       :totalPages="totalPages" @change-page="changePage" />
   </main>
@@ -450,71 +286,7 @@ body {
   margin: auto;
 }
 
-/* 
 .search-wrapper {
-  position: relative;
-  max-width: 300px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 10px 36px 10px 10px; 
-  font-size: 14px;
-  border: 1px solid #555;
-  border-radius: 6px;
-  outline: none;
-  background-color: #222;
-  color: #fff;
-}
-
-.search-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  z-index: 10;
-}
-
-
-
-.search-history-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #2b2b2b;
-  border: 1px solid #444;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  z-index: 20;
-  max-height: 200px;
-  overflow-y: auto;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.search-history-dropdown li {
-  padding: 10px;
-  cursor: pointer;
-  color: #fff;
-}
-
-.search-history-dropdown li:hover {
-  background: #444;
-}
-
-.close-searchHistory {
-  position: absolute;
-  top: 7px;
-  right: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #fff;
-} */
- .search-wrapper {
   position: relative;
   max-width: 300px;
   display: flex;
@@ -591,33 +363,14 @@ body {
 
 /* Main Content */
 
-/* .main-content {
-  padding: 2rem 1rem;
-  margin: auto;
-  width: 200vw;
-  max-width: 1600px;
-} */
 .main-content {
   padding: 2rem 1rem;
   margin: auto;
-  /* width: 200vw; ❌ */
-  /* max-width: 1600px; ✅ mantener esto */
   width: 100%;
   max-width: 1600px;
   box-sizing: border-box;
 }
 
-/* .character-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 24px;
-  justify-content: center;
-  padding: 20px;
-  margin-top: 80px;
-  width: 1600vw;
-  max-width: 1600px;
-  box-sizing: border-box;
-} */
 .character-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 2fr));
@@ -705,7 +458,6 @@ body {
     margin: 30px;
   }
 }
-
 
 .no-results-message {
   text-align: center;
