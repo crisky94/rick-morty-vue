@@ -1,6 +1,7 @@
 <script setup>
 import ModalDetails from './components/ModalDetails.vue';
 import Pagination from './components/Pagination.vue';
+import Navbar from './components/Navbar.vue';
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 
 const selectedCharacter = ref({});
@@ -19,18 +20,18 @@ const isHistoryVisible = ref(false);
 const noResultsFound = ref(false);
 
 
-const filteredHistory = computed(() => {
-  const query = searchQuery.value.toLowerCase();
-  return searchHistory.value.filter((term) =>
-    term.toLowerCase().includes(query)
-  );
-});
+// const filteredHistory = computed(() => {
+//   const query = searchQuery.value.toLowerCase();
+//   return searchHistory.value.filter((term) =>
+//     term.toLowerCase().includes(query)
+//   );
+// });
 
-function handleClickOutside(event) {
-  if (!event.target.closest('.search-wrapper')) {
-    isHistoryVisible.value = false;
-  }
-}
+// function handleClickOutside(event) {
+//   if (!event.target.closest('.search-wrapper')) {
+//     isHistoryVisible.value = false;
+//   }
+// }
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
@@ -193,13 +194,14 @@ async function changePage(page) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function toggleHistory() {
-  isHistoryVisible.value = !isHistoryVisible.value;
-}
+// function toggleHistory() {
+//   isHistoryVisible.value = !isHistoryVisible.value;
+// }
 </script>
 
 <template>
-  <nav class="navbar">
+  <!-- <nav class="navbar">
+
     <div class="navbar-content">
       <h1 class="navbar-title">Rick and Morty Gallery</h1>
       <div class="search-wrapper">
@@ -233,7 +235,15 @@ function toggleHistory() {
         </div>
       </div>
     </div>
-  </nav>
+  </nav> -->
+  <Navbar
+    v-model:searchQuery="searchQuery"
+    :searchHistory="searchHistory"
+    :recentCharacter="recentCharacter"
+    @openModal="openModal"
+    @closeSearchModal="closeSearchModal"
+    @useHistoryTerm="useHistoryTerm"
+    />
   <main class="main-content">
     <div class="character-grid">
       <div class="character-card glow-pointer" v-for="character in filteredCharacters" :key="character.id"
@@ -251,242 +261,7 @@ function toggleHistory() {
       :totalPages="totalPages" @change-page="changePage" />
   </main>
 </template>
-<!-- <style>
 
-
-/* Navbar */
-
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #1f1f1f;
-  color: white;
-  z-index: 1000;
-  padding: 20px 10px;
-  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
-}
-
-.navbar-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.search-wrapper {
-  position: relative;
-  max-width: 300px;
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  flex-grow: 1;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #555;
-  border-radius: 6px 0 0 6px;
-  outline: none;
-  background-color: #222;
-  color: #fff;
-}
-
-.search-buttons {
-  display: flex;
-  background-color: #222;
-  border: 1px solid #555;
-  border-left: none;
-  border-radius: 0 6px 6px 0;
-}
-
-.search-buttons button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ccc;
-}
-
-.search-history-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #2b2b2b;
-  border: 1px solid #444;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  z-index: 20;
-  max-height: 200px;
-  overflow-y: auto;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.search-history-dropdown li {
-  padding: 10px;
-  cursor: pointer;
-  color: #fff;
-}
-
-.search-history-dropdown li:hover {
-  background: #444;
-}
-
-.search-buttons button:hover {
-  color: #0f0;
-}
-
-.close-searchHistory svg {
-  width: 18px;
-  height: 18px;
-}
-
-
-
-/* Main Content */
-
-.main-content {
-  padding: 20px 10px;
-  margin: auto;
-  width: 100%;
-  max-width: 1600px;
-  box-sizing: border-box;
-}
-
-.character-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 2fr));
-  gap: 20px;
-  justify-content: center;
-  padding: 24px;
-  margin-top: 80px;
-  width: 100%;
-  max-width: 1500px;
-  box-sizing: border-box;
-}
-
-.character-card {
-  width: 180px;
-  border-radius: 8px;
-  text-align: center;
-  background: none;
-  box-shadow: none;
-  color: #eee;
-}
-
-.character-card img {
-  height: 100px;
-  object-fit: cover;
-  border-radius: 6px;
-  background: #222;
-}
-
-.character-card h2 {
-  font-size: 1.1em;
-  color: #eee;
-}
-
-.character-card p {
-  color: #efe4e4;
-  margin: 5px 0 10px 0;
-}
-
-.recent-character-name {
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.extra-character {
-  display: flex;
-  justify-content: center;
-  margin-top: 80px;
-}
-
-.no-results-message {
-  text-align: center;
-  color: #ff6b6b;
-  font-size: 12px;
-  margin-top: 20px;
-}
-
-.glow-pointer {
-  display: inline-block;
-  padding: 10px 20px;
-  color: #00ff88;
-  border: 2px solid #00ff88;
-  border-radius: 8px;
-  font-weight: bold;
-  background: #111;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 0 5px #00ff88;
-}
-
-.glow-pointer:hover {
-  box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88;
-  background: #000;
-  transform: scale(1.03);
-} -->
-
-/* Responsive */
-
-/* @media (max-width: 480px) {
-  .main-content {
-    padding: 10px;
-  }
-
-  .character-grid {
-    gap: 16px;
-  }
-
-  .search-input {
-    font-size: 12px;
-  }
-
-  .glow-pointer {
-    padding: 10px 20px;
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 600px) {
-  .navbar-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .main-content {
-    padding: 10px;
-    width: 100%;
-  }
-
-  .character-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    margin: 30px;
-  }
-}
-
-@media (min-width: 640px) {
-  .character-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 768px) {
-  .character-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-} */
-<!-- </style> -->
 <style>
 /* Base Styles (Mobile-First) */
 body {
