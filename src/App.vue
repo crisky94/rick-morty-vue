@@ -225,8 +225,12 @@ body {
   max-width: 1600px;
   box-sizing: border-box; 
 }
+/* ... other styles ... */
+
 .character-card {
-  width: 90%; 
+  width: 80%;
+  /* Add a max-width to the card */
+  max-width: 300px; /* Adjust this value as needed */
   border-radius: 8px;
   text-align: center;
   background: none;
@@ -238,12 +242,14 @@ body {
   justify-content: flex-start;
 }
 
+/* ... other styles ... */
+
 .character-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   padding: 20px 10px; 
-  width: 100%;
+  width: 80%;
   max-width: 1400px;
   box-sizing: border-box;
   margin: 205px auto 0;
@@ -280,7 +286,6 @@ body {
 
 .glow-pointer {
   display: inline-block;
-  padding: 8px 15px;
   color: #00ff88;
   border: 2px solid #00ff88;
   border-radius: 8px;
