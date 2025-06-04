@@ -65,6 +65,7 @@ function handleFocusInput() {
     if (localSearchQuery.value === '' || filteredHistory.value.length > 0) {
         isHistoryVisible.value = true;
     }
+    return isHistoryVisible.value;
 }
 </script>
 
@@ -79,7 +80,8 @@ function handleFocusInput() {
                     </svg>
                 </button>
 
-                <div class="input-area-wrapper"> <input
+                <div class="input-area-wrapper"> 
+                    <input
                         type="text"
                         placeholder="Buscar..."
                         class="search-input"
@@ -97,7 +99,7 @@ function handleFocusInput() {
                     </button>
                 </div>
 
-                <ul v-if="isHistoryVisible && (localSearchQuery === '' || filteredHistory.length > 0)"
+                <ul v-if="isHistoryVisible && localSearchQuery === '' && filteredHistory.length > 0"
                     class="search-history-dropdown">
                     <li v-for="(term, idx) in filteredHistory" :key="idx" @click="handleUseHistoryTerm(term)">
                         {{ term }}
