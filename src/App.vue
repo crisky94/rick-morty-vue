@@ -228,7 +228,7 @@ body {
   margin-top: 150px;
 }
 
-.character-grid {
+/* .character-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
@@ -249,17 +249,55 @@ body {
   box-shadow: none;
   color: #eee;
   padding: 10px;
+} */
+.character-card {
+  /* Remove max-width: 180px; */
+  width: 90%; /* Keep this to ensure it fills its grid cell */
+  border-radius: 8px;
+  text-align: center;
+  background: none; /* Consider adding a background color if you want cards to stand out */
+  box-shadow: none;
+  color: #eee;
+  padding: 10px;
+  /* Add flex properties if you want the content inside the card to align */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Or space-between */
 }
 
-.character-card img {
+.character-grid {
+  display: grid;
+  /*
+  Consider increasing the minmax for columns slightly,
+  or let the cards be more flexible without a hard max-width on them.
+  For example, allowing columns to be 200px minimum or more.
+  */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusted min-width for columns */
+  gap: 20px;
+  padding: 20px 10px; /* Reduce padding on grid for better mobile use, or use percentages */
+  width: 100%;
+  max-width: 1400px;
+  box-sizing: border-box;
+  margin: 65px auto 0; /* Center the grid */
+}
+/* .character-card img {
   width: 80px;
   height: 80px;
   object-fit: cover;
   border-radius: 6px;
   background: #222;
+} */
+.character-card img {
+  width: 80%; /* Makes image 80% of the card's width */
+  max-width: 120px; /* Prevents images from getting too big on huge screens */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover;
+  border-radius: 6px;
+  background: #222;
+  margin-bottom: 10px; /* Add some space below the image */
 }
-
-.character-card h2 {
+/* .character-card h2 {
   font-size: 1em;
   color: #eee;
   margin-top: 10px;
@@ -270,8 +308,21 @@ body {
   color: #efe4e4;
   margin: 5px 0 10px 0;
   font-size: 0.8em;
+} */
+/* If your base font size is 16px (default), then 1em is 16px.
+   If it still feels too small, you can increase it. */
+.character-card h2 {
+  font-size: 1.1em; /* Slightly larger */
+  color: #eee;
+  margin-top: 10px;
+  margin-bottom: 5px;
 }
 
+.character-card p {
+  font-size: 0.9em; /* Slightly larger */
+  color: #efe4e4;
+  margin: 5px 0 10px 0;
+}
 .no-results-message {
   text-align: center;
   color: #ff6b6b;

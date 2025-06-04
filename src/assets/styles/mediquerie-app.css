@@ -1,6 +1,6 @@
-/* Media Queries for Responsiveness */
+/* Media Queries for Responsiveness
 /* Small devices (phones, 480px and up) */
-@media (min-width: 480px) {
+/* @media (min-width: 480px) {
     .navbar-content {
         flex-direction: row;
         justify-content: space-between;
@@ -80,10 +80,10 @@
         padding: 10px 20px;
         font-size: 1em;
     }
-}
+} */
 
 /* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
     .navbar-content {
         padding: 20px 40px;
     }
@@ -116,10 +116,10 @@
     .character-card p {
         font-size: 1em;
     }
-}
+} */
 
 /* Large devices (desktops, 1024px and up) */
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
     .navbar-content {
         padding: 20px 60px;
     }
@@ -140,5 +140,89 @@
     .character-card img {
         width: 140px;
         height: 140px;
+    }
+}  */
+
+/* Small devices (phones, 480px and up) */
+@media (min-width: 480px) {
+    /* ... other styles ... */
+
+    .character-grid {
+        /* Keep minmax for grid columns. The cards will fill the 1fr part */
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .character-card {
+        /* REMOVE 'width: 160px;' */
+        /* You can add a max-width here if you want to limit how wide a card can get */
+        /* For example: max-width: 250px; */
+        padding: 15px;
+    }
+
+    .character-card img {
+        width: 80%; /* Use percentage to scale with card */
+        height: auto;
+        max-width: 100px; /* Set a max for the image if desired */
+    }
+
+    .character-card h2 {
+        font-size: 1.1em;
+    }
+
+    .character-card p {
+        font-size: 0.9em;
+    }
+
+    /* ... other styles ... */
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    /* ... other styles ... */
+
+    .character-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .character-card {
+        /* REMOVE 'width: 180px;' */
+        /* max-width: 300px; /* Example */
+    }
+
+    .character-card img {
+        width: 80%;
+        height: auto;
+        max-width: 120px; /* Set a max for the image if desired */
+    }
+
+    .character-card h2 {
+        font-size: 1.2em;
+    }
+
+    .character-card p {
+        font-size: 1em;
+    }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+    /* ... other styles ... */
+
+    .character-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 25px;
+    }
+
+    .character-card {
+        /* REMOVE 'width: 200px;' */
+        /* max-width: 350px; /* Example, allowing cards to be larger */
+    }
+
+    .character-card img {
+        width: 80%;
+        height: auto;
+        max-width: 140px; /* Set a max for the image if desired */
     }
 }
