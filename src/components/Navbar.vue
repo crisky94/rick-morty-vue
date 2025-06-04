@@ -30,7 +30,7 @@ const filteredHistory = computed(() => {
 });
 
 function handleClickOutside(event) {
-    if (!event.target.closest('.search-wrapper')) {
+    if (!event.target.closest('.search-container')) { 
         isHistoryVisible.value = false;
     }
 }
@@ -49,15 +49,22 @@ function toggleHistory() {
 
 function handleUseHistoryTerm(term) {
     emit('useHistoryTerm', term);
-    isHistoryVisible.value = false; // Hide history after selecting a term
+    isHistoryVisible.value = false;
 }
 
 function handleOpenModal(character) {
     emit('openModal', character);
 }
 
-function handleCloseSearchModal() {
-    emit('closeSearchModal');
+function handleClearSearch() {
+    localSearchQuery.value = '';
+    isHistoryVisible.value = false;
+}
+
+function handleFocusInput() {
+    if (localSearchQuery.value === '' || filteredHistory.value.length > 0) {
+        isHistoryVisible.value = true;
+    }
 }
 </script>
 
@@ -65,25 +72,32 @@ function handleCloseSearchModal() {
     <nav class="navbar">
         <div class="navbar-content">
             <h1 class="navbar-title">Rick and Morty Gallery</h1>
-            <div class="search-wrapper">
-                <input type="text" placeholder="Buscar..." class="search-input" v-model="localSearchQuery"
-                    @input="isHistoryVisible = true" @focus="isHistoryVisible = true" />
-                <div class="search-buttons">
-                    <button class="history-btn" @click="toggleHistory" title="Mostrar historial">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ccc" viewBox="0 0 24 24">
-                            <path
-                                d="M13 3a9 9 0 1 0 8.9 10h-2.02A7 7 0 1 1 13 5v2l3-3-3-3v2zm1 5h-1v5l4.28 2.54.72-1.21-3.5-2.08V8z" />
-                        </svg>
-                    </button>
-                    <button class="close-searchHistory" @click="handleCloseSearchModal" title="Cerrar búsqueda">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                            fill="#e8eaed">
-                            <path
-                                d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z" />
-                        </svg>
+            <div class="search-container"> <button class="history-button" @click="toggleHistory" title="Mostrar historial">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ccc" viewBox="0 0 24 24">
+                        <path
+                            d="M13 3a9 9 0 1 0 8.9 10h-2.02A7 7 0 1 1 13 5v2l3-3-3-3v2zm1 5h-1v5l4.28 2.54.72-1.21-3.5-2.08V8z" />
+                    </svg>
+                </button>
+
+                <div class="input-area-wrapper"> <input
+                        type="text"
+                        placeholder="Buscar..."
+                        class="search-input"
+                        v-model="localSearchQuery"
+                        @input="isHistoryVisible = true"
+                        @focus="handleFocusInput"
+                    />
+                    <button
+                        v-if="localSearchQuery"
+                        class="clear-input-button"
+                        @click="handleClearSearch"
+                        title="Limpiar búsqueda"
+                    >
+                        X
                     </button>
                 </div>
-                <ul v-if="isHistoryVisible && localSearchQuery === '' && filteredHistory.length > 0"
+
+                <ul v-if="isHistoryVisible && (localSearchQuery === '' || filteredHistory.length > 0)"
                     class="search-history-dropdown">
                     <li v-for="(term, idx) in filteredHistory" :key="idx" @click="handleUseHistoryTerm(term)">
                         {{ term }}
@@ -127,52 +141,72 @@ function handleCloseSearchModal() {
     margin-bottom: 5px;
 }
 
-.search-wrapper {
-    position: relative;
-    width: 80%;
-    max-width: 250px;
+.search-container {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 5px;
+    align-items: center;
+    width: 80%;
+    max-width: 350px;
+    gap: 10px;
+    position: relative; 
+}
+
+.history-button {
+    background: #222;
+    border: 1px solid #555;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    flex-shrink: 0;
+}
+
+.history-button:hover {
+    color: #0f0;
+}
+
+.input-area-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
 }
 
 .search-input {
-    padding: 8px;
+    width: 100%;
+    padding: 8px 30px 8px 10px;
     font-size: 14px;
     border: 1px solid #555;
     border-radius: 6px;
     outline: none;
     background-color: #222;
     color: #fff;
-    width: auto;
+    box-sizing: border-box;
 }
 
-.search-buttons {
-    display: flex;
-    justify-content: flex-end;
-    background-color: #222;
-    border: 1px solid #555;
-    border-radius: 6px;
-    width: 24%;
-    margin-bottom: 5px;
-}
-
-.search-buttons button {
+.clear-input-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
     background: none;
     border: none;
-    cursor: pointer;
-    padding: 0 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     color: #ccc;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 0 4px;
+}
+
+.clear-input-button:hover {
+    color: #fff;
 }
 
 .search-history-dropdown {
     position: absolute;
     top: calc(100% + 5px);
-    left: 0;
     right: 0;
     background: #2b2b2b;
     border: 1px solid #444;
@@ -183,6 +217,8 @@ function handleCloseSearchModal() {
     list-style: none;
     margin: 0;
     padding: 0;
+    width: calc(100% - 70px);
+    left: 70px; 
 }
 
 .search-history-dropdown li {
@@ -194,15 +230,6 @@ function handleCloseSearchModal() {
 
 .search-history-dropdown li:hover {
     background: #444;
-}
-
-.search-buttons button:hover {
-    color: #0f0;
-}
-
-.close-searchHistory svg {
-    width: 18px;
-    height: 18px;
 }
 
 /* Recent Character */
