@@ -223,8 +223,7 @@ body {
   margin: auto;
   width: 100%;
   max-width: 1600px;
-  box-sizing: border-box;
-  background-color: #1a1a1a; 
+  box-sizing: border-box; 
 }
 .character-card {
   width: 90%; 
