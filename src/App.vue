@@ -279,7 +279,7 @@ body {
   width: 100%;
   max-width: 1400px;
   box-sizing: border-box;
-  margin: 65px auto 0; /* Center the grid */
+  margin: 40px auto 0; /* Center the grid */
 }
 /* .character-card img {
   width: 80px;
