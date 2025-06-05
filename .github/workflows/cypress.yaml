@@ -22,7 +22,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies # Instala las dependencias del proyecto (incluyendo las de Cypress)
-        run: pnpm add
+        run: npm install
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
