@@ -27,4 +27,4 @@ jobs:
           record: true
           parallel: true
         env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          $ cypress run --record --key <record_key>
