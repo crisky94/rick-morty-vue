@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20' # Ajusta a la versión de Node.js de tu proyecto
-          cache: 'pnpm'
 
       - name: Install dependencies # Instala las dependencias del proyecto (incluyendo las de Cypress)
         run: npm install
