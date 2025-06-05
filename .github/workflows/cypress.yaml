@@ -1,0 +1,41 @@
+name: Cypress Tests
+on: [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Configura Node.js y pnpm. Aunque no inicies un server local,
+      # tu proyecto puede necesitar pnpm para instalar dependencias de Cypress,
+      # o si tienes un script 'build' que se ejecuta antes de desplegar.
+      - name: Set up Node.js with PNPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Ajusta a la versión de Node.js de tu proyecto
+          cache: 'pnpm'
+
+      - name: Install dependencies # Instala las dependencias del proyecto (incluyendo las de Cypress)
+        run: pnpm install
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          # Elimina 'start' y 'wait-on' si no vas a iniciar un servidor local
+          # start: npm start
+          # wait-on: 'http://localhost:3000'
+
+          # ¡MUY IMPORTANTE! Configura la URL base de tu aplicación desplegada
+          config: baseUrl=https://your-app-deployed-url.com # <-- CAMBIA ESTO
+
+          record: true
+          parallel: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
