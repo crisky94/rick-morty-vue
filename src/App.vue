@@ -14,7 +14,6 @@ const recentCharacter = ref({});
 const filteredCharacters = ref([]);
 const searchQuery = ref('');
 const searchHistory = ref([]);
-
 const isModalOpen = ref(false);
 const isSearchModalOpen = ref(false);
 const isHistoryVisible = ref(false);
@@ -207,7 +206,7 @@ async function changePage(page) {
       ❌ No se ha encontrado ningún personaje con ese nombre.
     </p>
     <ModalDetails :character="selectedCharacter" :isModalOpen="isModalOpen" @close="isModalOpen = false" />
-    <Pagination v-if="!noResultsFound && filteredCharacters.length > 1" :currentPage="currentPage"
+    <Pagination v-if="!noResultsFound && searchQuery.length === 0 && characters.length > 5" :currentPage="currentPage"
       :totalPages="totalPages" @change-page="changePage" />
   </main>
 </template>
