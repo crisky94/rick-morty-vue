@@ -31,7 +31,7 @@ jobs:
           # wait-on: 'http://localhost:3000'
 
           # ¡MUY IMPORTANTE! Configura la URL base de tu aplicación desplegada
-          config: baseUrl=https://localhost:5173 # <-- CAMBIA ESTO
+          config: baseUrl=http://localhost:5173/ <-- CAMBIA ESTO
 
           record: true
           parallel: true
