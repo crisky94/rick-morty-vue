@@ -31,7 +31,11 @@ jobs:
           # wait-on: 'http://localhost:3000'
 
           # ¡MUY IMPORTANTE! Configura la URL base de tu aplicación desplegada
+<<<<<<< HEAD
           config: baseUrl=https://rick-morty-39iyxpr96-crisky94s-projects.vercel.app/ # <-- CAMBIA ESTO
+=======
+          config: baseUrl=http://localhost:5173/ <-- CAMBIA ESTO
+>>>>>>> 5115e4917f9764918fd6db8f86ab4687625d7bba
 
           record: true
           parallel: true
