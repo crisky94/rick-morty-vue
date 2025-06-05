@@ -3,42 +3,31 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    # Runs tests in parallel with matrix strategy https://docs.cypress.io/guides/guides/parallelization
-    # https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
-    # Also see warning here https://github.com/cypress-io/github-action#parallel
     strategy:
-      fail-fast: false # https://github.com/cypress-io/github-action/issues/48
+      fail-fast: false
       matrix:
-        containers: [1, 2] # Uses 2 parallel instances
+        containers: [1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ADD THIS STEP TO SET UP NODE.JS AND PNPM
-      - name: Set up Node.js with PNPM
+      # AÑADE ESTE NUEVO PASO AQUÍ
+      - name: Configurar Node.js y PNPM
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Adjust to your project's Node.js version
-          cache: 'pnpm' # This ensures pnpm is installed and cached
+          node-version: '20' # <-- IMPORTANTE: Pon aquí la versión de Node.js que usa tu proyecto (e.g., '16', '18', '20')
+          cache: 'pnpm'     # <-- ESTO ES CLAVE: Le dice a la acción que instale y configure pnpm
 
-      - name: Install dependencies (optional, but good practice if not handled by Cypress action)
-        run: pnpm install # Install your project's dependencies
+      # OPCIONAL PERO RECOMENDADO: Instalar tus dependencias
+      - name: Instalar dependencias
+        run: pnpm install # Asegúrate de que todas las dependencias de tu proyecto estén instaladas
 
       - name: Cypress run
-        # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
         uses: cypress-io/github-action@v6
         with:
-          # Starts web server for E2E tests - replace with your own server invocation
-          # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
-          start: npm start
-          wait-on: 'http://localhost:5173' # Waits for above
-          # Records to Cypress Cloud
-          # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
+          start: pnpm start # Ahora pnpm debería estar disponible
+          wait-on: 'http://localhost:5173'
           record: true
-          parallel: true # Runs test in parallel using settings above
+          parallel: true
         env:
-          # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
-          # in GitHub repo → Settings → Secrets → Actions
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Creating a token https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
-    
