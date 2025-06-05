@@ -15,7 +15,7 @@ jobs:
       - name: Configurar Node.js y PNPM
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # <-- IMPORTANTE: Pon aquí la versión de Node.js que usa tu proyecto (e.g., '16', '18', '20')
+          node-version: '22.15' # <-- IMPORTANTE: Pon aquí la versión de Node.js que usa tu proyecto (e.g., '16', '18', '20')
           cache: 'pnpm'     # <-- ESTO ES CLAVE: Le dice a la acción que instale y configure pnpm
 
       # OPCIONAL PERO RECOMENDADO: Instalar tus dependencias
