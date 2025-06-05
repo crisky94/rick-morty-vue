@@ -9,31 +9,48 @@ jobs:
       matrix:
         containers: [1, 2]
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # Configura Node.js y pnpm. Aunque no inicies un server local,
-      # tu proyecto puede necesitar pnpm para instalar dependencias de Cypress,
-      # o si tienes un script 'build' que se ejecuta antes de desplegar.
+      # --- Paso 1: Configurar Node.js y PNPM (VERIFICAR ESTO) ---
       - name: Set up Node.js with PNPM
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Ajusta a la versión de Node.js de tu proyecto
-          cache: 'pnpm'
+          node-version: '20' # ASEGÚRATE de que esta sea la versión correcta para tu proyecto
+          cache: 'pnpm'     # ¡ESTA LÍNEA ES CRUCIAL!
 
-      - name: Install dependencies # Instala las dependencias del proyecto (incluyendo las de Cypress)
+      # --- Pasos de DEPURACIÓN (AÑADE ESTOS) ---
+      - name: Debug: Check PNPM version after setup
+        run: pnpm -v || echo "pnpm command not found after setup-node"
+        # Esto intentará ejecutar pnpm -v. Si funciona, mostrará la versión.
+        # Si no funciona, al menos mostrará un mensaje para saber que sigue sin encontrarlo.
+
+      - name: Debug: Print PATH environment variable
+        run: echo $PATH
+        # Esto mostrará todas las rutas donde el sistema busca ejecutables.
+        # Buscaremos una ruta que apunte a donde se instala pnpm.
+
+      - name: Debug: List contents of Node.js tool cache
+        run: |
+          ls -F /opt/hostedtoolcache/node/20.19.1/x64/bin/ || true
+          ls -F /opt/hostedtoolcache/node/20.19.1/x64/ || true
+          # Esto es para ver si pnpm se instaló en el directorio esperado.
+          # Ajusta la ruta 20.19.1 a la versión exacta de Node.js que aparece en tu log.
+
+      # --- Paso 2: Instalar dependencias (VERIFICAR ESTO) ---
+      - name: Install project dependencies
         run: pnpm install
+        # Si el error persiste aquí, los pasos de depuración previos nos darán pistas.
 
-      - name: Cypress run
+      # --- Paso 3: Ejecutar Cypress (VERIFICAR ESTO) ---
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
-          # Elimina 'start' y 'wait-on' si no vas a iniciar un servidor local
+          # Si no inicias un servidor local, estas líneas DEBEN ESTAR COMENTADAS O ELIMINADAS
           # start: npm start
           # wait-on: 'http://localhost:3000'
 
-          # ¡MUY IMPORTANTE! Configura la URL base de tu aplicación desplegada
-          config: baseUrl=https://your-app-deployed-url.com # <-- CAMBIA ESTO
-
+          config: baseUrl=https://your-app-deployed-url.com # <--- ¡CAMBIA ESTO A LA URL REAL DE TU APP!
           record: true
           parallel: true
         env:
