@@ -43,35 +43,35 @@ function nextPage() {
     color: white;
     display: flex;
     justify-content: center;
-    gap: 8px; /* Slightly reduced gap for smaller screens */
+    gap: 8px;
     margin-top: 20px;
-    flex-wrap: wrap; /* Allows buttons to wrap to the next line */
+    flex-wrap: wrap;
     width: 100%;
-    padding: 0 8px; /* Add some horizontal padding to prevent stretching too wide */
-    box-sizing: border-box; /* Include padding in the element's total width */
+    padding: 0 8px;
+    box-sizing: border-box; 
 }
 
 .pagination .page-info {
     margin-top: 6px;
-    font-size: 0.9em; /* Smaller font size for mobile */
-    flex-basis: 100%; /* Makes page info take full width on very small screens */
-    text-align: center; /* Center the page info */
-    order: -1; /* Puts page info above buttons on very small screens if needed */
-    margin-bottom: 8px; /* Space below page info */
+    font-size: 0.9em;
+    flex-basis: 100%;
+    text-align: center;
+    order: -1; 
+    margin-bottom: 8px; 
 }
 
 .pagination button {
     background: #282828;
     color: #fff;
     border: none;
-    padding: 2px 2px; /* Slightly more vertical padding for easier tapping */
-    font-size: 0.9em; /* Smaller font size for buttons */
+    padding: 2px 2px; 
+    font-size: 0.9em;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s ease;
-    flex-grow: 1; /* Allow buttons to grow and fill space, especially "Anterior" and "Siguiente" */
-    min-width: 60px; /* Ensure a minimum width for buttons */
-    max-width: 80px; /* Prevent them from becoming too wide */
+    flex-grow: 1;
+    min-width: 60px;
+    max-width: 80px;
 }
 
 .pagination button:hover {
@@ -88,22 +88,22 @@ function nextPage() {
 /* Small tablets / Larger phones */
 @media (min-width: 480px) {
     .pagination {
-        gap: 10px; /* Restore original gap */
+        gap: 10px;
         padding: 0 20px;
     }
 
     .pagination .page-info {
-        font-size: 1em; /* Restore original font size */
-        flex-basis: auto; /* Allow it to sit in line with buttons */
-        order: 0; /* Reset order */
-        margin-bottom: 0; /* Remove extra margin */
-        min-width: unset; /* Don't force min-width */
+        font-size: 1em;
+        flex-basis: auto;
+        order: 0;
+        margin-bottom: 0;
+        min-width: unset;
     }
 
     .pagination button {
-        padding: 6px 12px; /* Restore original padding */
-        font-size: 1em; /* Restore original font size */
-        flex-grow: 0; /* Don't force growing */
+        padding: 6px 12px;
+        font-size: 1em; 
+        flex-grow: 0;
         min-width: unset;
         max-width: unset;
     }
@@ -112,8 +112,8 @@ function nextPage() {
 /* Larger tablets and desktops */
 @media (min-width: 768px) {
     .pagination {
-        max-width: 1600px; /* Use the original max-width */
-        margin: 20px auto; /* Center the pagination */
+        max-width: 1600px;
+        margin: 20px auto; 
     }
 }
 </style>

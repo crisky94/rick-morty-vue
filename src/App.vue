@@ -66,6 +66,14 @@ function saveSearchToHistory(term) {
   localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value));
 }
 
+const handleNoResults = () => {
+  noResultsFound.value = true;
+  setTimeout(() => {
+    noResultsFound.value = false;
+  }, 3000);
+};
+
+
 const fetchCharacters = async (page) => {
   try {
     const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
@@ -93,12 +101,12 @@ watch(searchQuery, async (newQuery) => {
       noResultsFound.value = false;
     } else {
       filteredCharacters.value = [];
-      noResultsFound.value = true;
+      handleNoResults();
     }
   } catch (e) {
     console.error('Error buscando personaje', e);
     filteredCharacters.value = [];
-    noResultsFound.value = true;
+    handleNoResults();
   }
 });
 
@@ -144,11 +152,11 @@ async function useHistoryTerm(term) {
       noResultsFound.value = false
       openModal(found);
     } else {
-      noResultsFound.value = true;
+      handleNoResults();
     }
   } catch (e) {
     console.error('Error buscando personaje', e);
-    noResultsFound.value = true;
+    handleNoResults();
   }
 }
 
@@ -166,12 +174,12 @@ async function changePage(page) {
         noResultsFound.value = false;
       } else {
         filteredCharacters.value = [];
-        noResultsFound.value = true;
+        handleNoResults();
       }
     } catch (error) {
       console.error('Error fetching filtered characters:', error);
       filteredCharacters.value = [];
-      noResultsFound.value = true;
+      handleNoResults();
     }
   } else {
     await fetchCharacters(page);
@@ -184,14 +192,8 @@ async function changePage(page) {
 </script>
 
 <template>
-  <Navbar
-    v-model:searchQuery="searchQuery"
-    :searchHistory="searchHistory"
-    :recentCharacter="recentCharacter"
-    @openModal="openModal"
-    @closeSearchModal="closeSearchModal"
-    @useHistoryTerm="useHistoryTerm"
-    />
+  <Navbar v-model:searchQuery="searchQuery" :searchHistory="searchHistory" :recentCharacter="recentCharacter"
+    @openModal="openModal" @closeSearchModal="closeSearchModal" @useHistoryTerm="useHistoryTerm" />
   <main class="main-content">
     <div class="character-grid">
       <div class="character-card glow-pointer" v-for="character in filteredCharacters" :key="character.id"
@@ -205,7 +207,7 @@ async function changePage(page) {
       ❌ No se ha encontrado ningún personaje con ese nombre.
     </p>
     <ModalDetails :character="selectedCharacter" :isModalOpen="isModalOpen" @close="isModalOpen = false" />
-    <Pagination v-if="!isSearchModalOpen && filteredCharacters.length > 2" :currentPage="currentPage"
+    <Pagination v-if="!noResultsFound && filteredCharacters.length > 1" :currentPage="currentPage"
       :totalPages="totalPages" @change-page="changePage" />
   </main>
 </template>
@@ -217,20 +219,19 @@ body {
   background-color: #222;
   color: white;
 }
+
 /* Main Content */
 .main-content {
   padding: 20px 10px;
   margin: auto;
   width: 100%;
   max-width: 1600px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
-/* ... other styles ... */
 
 .character-card {
   width: 80%;
-  /* Add a max-width to the card */
-  max-width: 300px; /* Adjust this value as needed */
+  max-width: 300px;
   border-radius: 8px;
   text-align: center;
   background: none;
@@ -242,13 +243,11 @@ body {
   justify-content: flex-start;
 }
 
-/* ... other styles ... */
-
 .character-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  padding: 20px 10px; 
+  padding: 20px 10px;
   width: 80%;
   max-width: 1400px;
   box-sizing: border-box;
@@ -266,7 +265,7 @@ body {
 }
 
 .character-card h2 {
-  font-size: 1.1em; 
+  font-size: 1.1em;
   color: #eee;
   margin-top: 10px;
   margin-bottom: 5px;
@@ -277,6 +276,7 @@ body {
   color: #efe4e4;
   margin: 5px 0 10px 0;
 }
+
 .no-results-message {
   text-align: center;
   color: #ff6b6b;
