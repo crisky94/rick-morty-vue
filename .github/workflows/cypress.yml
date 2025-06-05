@@ -13,6 +13,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # ADD THIS STEP TO SET UP NODE.JS AND PNPM
+      - name: Set up Node.js with PNPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Adjust to your project's Node.js version
+          cache: 'pnpm' # This ensures pnpm is installed and cached
+
+      - name: Install dependencies (optional, but good practice if not handled by Cypress action)
+        run: pnpm install # Install your project's dependencies
+
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
         uses: cypress-io/github-action@v6
@@ -20,8 +31,8 @@ jobs:
           # Starts web server for E2E tests - replace with your own server invocation
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
           start: pnpm start
-          wait-on: 'http://localhost:3000' # Waits for above
-          # Records to Cypress Cloud 
+          wait-on: 'http://localhost:5173' # Waits for above
+          # Records to Cypress Cloud
           # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
           record: true
           parallel: true # Runs test in parallel using settings above
