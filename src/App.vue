@@ -206,7 +206,7 @@ async function changePage(page) {
     </p>
     <ModalDetails :character="selectedCharacter" :isModalOpen="isModalOpen" @close="isModalOpen = false" />
     <Pagination v-if="!noResultsFound && searchQuery.length === 0 && characters.length > 5" :currentPage="currentPage"
-       :totalPages="totalPages" @change-page="changePage" />
+      :totalPages="totalPages" @change-page="changePage" />
   </main>
 </template>
 
