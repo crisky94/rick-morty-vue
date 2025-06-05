@@ -12,9 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Configura Node.js y pnpm. Aunque no inicies un server local,
-      # tu proyecto puede necesitar pnpm para instalar dependencias de Cypress,
-      # o si tienes un script 'build' que se ejecuta antes de desplegar.
       - name: Set up Node.js with PNPM
         uses: actions/setup-node@v4
         with:
@@ -26,12 +23,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          # Elimina 'start' y 'wait-on' si no vas a iniciar un servidor local
-          # start: npm start
-          # wait-on: 'http://localhost:3000'
-
-          # ¡MUY IMPORTANTE! Configura la URL base de tu aplicación desplegada
-          config: baseUrl=https://rick-morty-39iyxpr96-crisky94s-projects.vercel.app/ # <-- CAMBIA ESTO
+          config: baseUrl=https://rick-morty-39iyxpr96-crisky94s-projects.vercel.app/
           record: true
           parallel: true
         env:
