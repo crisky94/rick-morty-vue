@@ -212,12 +212,12 @@ const statusClass = computed(() => (characterStatus) => {
 
           <div class="character-details">
             <div class="detail-row">
-              <span class="label">Especie:</span>
+              <span class="label">Species:</span>
               <span class="value">{{ character.species }}</span>
             </div>
 
             <div class="detail-row">
-              <span class="label">Género:</span>
+              <span class="label">Gender:</span>
               <span class="value">{{ character.gender }}</span>
             </div>
           </div>
