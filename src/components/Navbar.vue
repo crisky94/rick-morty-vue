@@ -240,4 +240,26 @@ function handleFocusInput() {
     transition: color 0.2s ease;
     font-size: 0.9em;
 }
+@media (min-width: 768px) {
+    .navbar-content {
+        flex-direction: row; /* Arranges items horizontally */
+        justify-content: space-between; /* Distributes space between items */
+        align-items: center; /* Aligns items vertically in the center */
+        padding: 0 20px; /* Add some horizontal padding */
+    }
+
+    .navbar-title {
+        margin-bottom: 0; /* Remove bottom margin for horizontal layout */
+    }
+
+    .search-container {
+        width: auto; /* Allow search container to take natural width */
+        max-width: 400px; /* Adjust max-width as needed */
+    }
+
+    .search-history-dropdown {
+        width: calc(100% - 40px); /* Adjust width to align with input field */
+        left: 40px; /* Adjust left position to align with input field */
+    }
+}
 </style>
