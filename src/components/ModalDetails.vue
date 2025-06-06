@@ -41,8 +41,8 @@ watch(() => props.isModalOpen, (newVal) => {
             <button @click="emit('close')" class="close-button" aria-label="Cerrar modal">✖</button>
             <img :src="character.image" :alt="character.name" class="character-image" v-if="character.image" />
             <h1 class="character-name">{{ character.name }}</h1>
-            <p><strong>Ubicación:</strong> {{ character.location?.name }}</p>
-            <p class="episode-title">Episodio(s):</p>
+            <p><strong>Location:</strong> {{ character.location?.name }}</p>
+            <p class="episode-title">Episode(s):</p>
             <ul :class="{ 'episode-list-clean': true }">
                 <li v-for="(name, index) in episodeNames" :key="index">
                     {{ name }}
