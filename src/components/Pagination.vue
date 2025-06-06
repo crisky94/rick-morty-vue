@@ -44,15 +44,14 @@ function nextPage() {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-top: 20px;
     flex-wrap: wrap;
     width: 100%;
     padding: 0 8px;
     box-sizing: border-box; 
+    margin-bottom: 50px;
 }
 
 .pagination .page-info {
-    margin-top: 6px;
     font-size: 0.9em;
     flex-basis: 100%;
     text-align: center;

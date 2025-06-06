@@ -2,8 +2,7 @@
 import ModalDetails from './components/ModalDetails.vue';
 import Pagination from './components/Pagination.vue';
 import Navbar from './components/Navbar.vue';
-import "./assets/styles/mediquerie-app.css"
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 
 const selectedCharacter = ref({});
 const extraCharacter = ref(null);
@@ -31,10 +30,6 @@ function openModal(character) {
   localStorage.setItem('recentCharacter', JSON.stringify(recentCharacter.value));
   saveSearchToHistory(character.name);
   isSearchModalOpen.value = false;
-
-  setTimeout(() => {
-    closeModal();
-  }, 10000);
 }
 
 function closeModal() {
@@ -42,10 +37,6 @@ function closeModal() {
   selectedCharacter.value = {};
 }
 
-function openSearchModal(query) {
-  searchQuery.value = query;
-  isSearchModalOpen.value = true;
-}
 
 function closeSearchModal() {
   extraCharacter.value = null;
@@ -71,6 +62,7 @@ const handleNoResults = () => {
     noResultsFound.value = false;
   }, 3000);
 };
+
 
 
 const fetchCharacters = async (page) => {
@@ -187,6 +179,17 @@ async function changePage(page) {
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+const statusClass = computed(() => (characterStatus) => {
+  switch (characterStatus.toLowerCase()) {
+    case 'alive':
+      return 'status-alive';
+    case 'dead':
+      return 'status-dead';
+    default:
+      return 'status-unknown';
+  }
+});
 </script>
 
 <template>
@@ -196,17 +199,42 @@ async function changePage(page) {
     <div class="character-grid">
       <div class="character-card glow-pointer" v-for="character in filteredCharacters" :key="character.id"
         @click="openModal(character)">
-        <img :src="character.image" :alt="character.name" />
-        <h2>{{ character.name }}</h2>
-        <p>{{ character.species }}</p>
+        <div class="character-image-container">
+          <img :src="character.image" :alt="character.name" class="character-image" loading="lazy" />
+          <div class="status-badge" :class="statusClass(character.status)">
+            <span class="status-dot"></span>
+            {{ character.status }}
+          </div>
+        </div>
+
+        <div class="character-info">
+          <h3 class="character-name">{{ character.name }}</h3>
+
+          <div class="character-details">
+            <div class="detail-row">
+              <span class="label">Especie:</span>
+              <span class="value">{{ character.species }}</span>
+            </div>
+
+            <div class="detail-row">
+              <span class="label">Género:</span>
+              <span class="value">{{ character.gender }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <p v-if="noResultsFound" class="no-results-message">
-      ❌ No se ha encontrado ningún personaje con ese nombre.
-    </p>
+    <div v-if="noResultsFound" class="no-results">
+          <h3>No characters found</h3>
+          <p>Try searching for something else</p>
+        </div>
     <ModalDetails :character="selectedCharacter" :isModalOpen="isModalOpen" @close="isModalOpen = false" />
-    <Pagination v-if="!noResultsFound && searchQuery.length === 0 && characters.length > 5" :currentPage="currentPage"
-      :totalPages="totalPages" @change-page="changePage" />
+    <Pagination
+      v-if="!noResultsFound && searchQuery.length === 0 && characters.length > 5"
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      @change-page="changePage"
+    />
   </main>
 </template>
 
@@ -227,59 +255,171 @@ body {
   box-sizing: border-box;
 }
 
+.character-grid {
+  padding: 20px;
+  margin-top: 210px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 100px;
+}
+
 .character-card {
-  width: 80%;
-  max-width: 300px;
-  border-radius: 8px;
-  text-align: center;
-  background: none;
-  color: #eee;
-  padding: 10px;
+  background: #1111;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.character-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.character-image-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+}
+
+.character-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.character-card:hover .character-image {
+  transform: scale(1.05);
+}
+
+.status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-alive {
+  background: rgba(46, 204, 113, 0.9);
+  color: white;
+}
+
+.status-alive .status-dot {
+  background: #27ae60;
+}
+
+.status-dead {
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+}
+
+.status-dead .status-dot {
+  background: #c0392b;
+}
+
+.status-unknown {
+  background: rgba(149, 165, 166, 0.9);
+  color: white;
+}
+
+.status-unknown .status-dot {
+  background: #7f8c8d;
+}
+
+.character-info {
+  padding: 1.5rem;
+}
+
+.character-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.character-details {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  gap: 10px;
 }
 
-.character-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  padding: 20px 10px;
-  width: 80%;
-  max-width: 1400px;
-  box-sizing: border-box;
-  margin: 205px auto 0;
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.character-card img {
-  width: 80%;
-  max-width: 120px;
-  height: auto;
-  object-fit: cover;
-  border-radius: 6px;
-  background: #222;
-  margin-bottom: 10px;
+.label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
-.character-card h2 {
-  font-size: 1.1em;
-  color: #eee;
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-.character-card p {
-  font-size: 0.9em;
-  color: #efe4e4;
-  margin: 5px 0 10px 0;
-}
-
-.no-results-message {
+.value {
+  color: white;
+  font-weight: 500;
   text-align: center;
-  color: #ff6b6b;
-  font-size: 1em;
-  margin-top: 20px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+@media (max-width: 480px) {
+  .character-grid{
+    margin-top: 250px;
+  }
+  .character-image-container {
+    height: 200px;
+  }
+
+  .character-info {
+    padding: 1rem;
+  }
+
+  .character-name {
+    font-size: 1.1rem;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .value {
+    text-align: left;
+  }
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.no-results h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
 }
 
 .glow-pointer {
