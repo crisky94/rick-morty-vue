@@ -82,7 +82,7 @@ const localSearchQuery = computed({
                 </button>
 
                 <div class="input-area-wrapper">
-                    <input type="text" placeholder="Buscar personaje..." class="search-input" v-model="localSearchQuery"
+                    <input type="text" placeholder="Search..." class="search-input" v-model="localSearchQuery"
                         @input="isHistoryVisible = true" @focus="handleFocusInput" />
                     <button v-if="localSearchQuery" class="clear-input-button" @click="handleClearSearch"
                         title="Limpiar búsqueda">
@@ -98,7 +98,7 @@ const localSearchQuery = computed({
                 </ul>
             </div>
             <div v-if="props.recentCharacter?.name">
-                <p>Personaje visto recientemente:</p>
+                <p>Last Character:</p>
                 <div class="recentCharater" @click="handleUseHistoryTerm(props.recentCharacter?.name)">
                     <h2 class="recent-character-name">{{ props.recentCharacter.name }}</h2>
                 </div>
