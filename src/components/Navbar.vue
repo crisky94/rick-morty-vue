@@ -103,17 +103,17 @@ const localSearchQuery = computed({
     </nav>
 </template>
 
-<style scoped>
+<style>
 .navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #1f1f1f;
+    background-color: #111;
     color: white;
     z-index: 1000;
     padding: 10px;
-    box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
+    box-shadow: 0 4px 12px rgba(27, 255, 84, 0.2);
 }
 
 .navbar-content {
@@ -173,7 +173,7 @@ const localSearchQuery = computed({
     width: 100%;
     padding: 0.75rem 1rem; /* Increased padding */
     padding-right: 2.5rem; /* Space for clear button */
-    border: 1px solid var(--input-border);
+    border: 1px solid white;
     border-radius: 8px; /* Consistent border-radius */
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -197,7 +197,6 @@ const localSearchQuery = computed({
 .search-input:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    background-color: var(--input-border);
 }
 
 .clear-input-button {
@@ -252,16 +251,42 @@ const localSearchQuery = computed({
 }
 
 /* Recent Character */
-.recentCharater {
-    width: 100%;
+.recent-character-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Stacks "Last Character" and the name vertically on small screens */
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    color: var(--navbar-text-color);
+    font-size: 0.9em;
+}
+
+.recentCharater {
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: #222;
+}
+
+.recentCharater:hover {
+    color: var(--button-hover-color);
+    background-color: #333;
 }
 
 .recent-character-name {
-    cursor: pointer;
-    transition: color 0.2s ease;
-    font-size: 0.9em;
+    text-align: center;
+    margin: 0;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+@media (min-width: 768px) {
+    .recent-character-container {
+        margin-top: 0;
+        flex-direction: row; /* Align horizontally on larger screens */
+        gap: 10px;
+    }
 }
 
 @media (min-width: 768px) {
