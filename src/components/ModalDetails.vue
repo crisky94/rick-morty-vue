@@ -52,13 +52,13 @@ watch(() => props.isModalOpen, (newVal) => {
     </div>
 </template>
 <style scoped>
-/* Variables para colores y sombras */
+
 :root {
     --primary-text: #1f2937;
     --secondary-text: #374151;
     --background-light: #f9fafb;
-    --background-dark: #1f2937; /* Darker background for episode list */
-    --accent-color: #4CAF50; /* A nice green accent */
+    --background-dark: #1f2937;
+    --accent-color: #4CAF50;
     --border-color: #e5e7eb;
     --shadow-light: rgba(0, 0, 0, 0.1);
     --shadow-medium: rgba(0, 0, 0, 0.2);
@@ -68,31 +68,31 @@ watch(() => props.isModalOpen, (newVal) => {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    z-index: 1000; /* Adjusted z-index for common modal layering */
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+    background-color: rgba(0, 0, 0, 0.6);
     padding: 1rem;
-    backdrop-filter: blur(4px); /* Subtle blur for depth */
+    backdrop-filter: blur(4px);
 }
 
 .modal-content {
     background-color: var(--background-light);
-    border-radius: 12px; /* Slightly more rounded corners */
+    border-radius: 12px;
     padding: 1.5rem;
     max-width: 95vw;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    box-shadow: 0 10px 25px var(--shadow-medium); /* More pronounced shadow */
+    box-shadow: 0 10px 25px var(--shadow-medium);
     text-align: center;
     color: var(--primary-text);
-    animation: fadeInScale 0.3s ease-out forwards; /* New animation */
+    animation: fadeInScale 0.3s ease-out forwards; 
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* Spacing between sections */
+    gap: 1rem;
 }
 
 .close-button {
@@ -114,7 +114,7 @@ watch(() => props.isModalOpen, (newVal) => {
 .close-button:hover {
     background-color: var(--border-color);
     color: var(--primary-text);
-    transform: rotate(90deg); /* Little spin effect */
+    transform: rotate(90deg);
 }
 
 .close-button svg {
@@ -140,12 +140,12 @@ watch(() => props.isModalOpen, (newVal) => {
 
 
 .character-image:hover {
-    transform: scale(1.05); /* Slight zoom on hover */
+    transform: scale(1.05);
 }
 
 .character-name {
-    font-size: 1.8em; /* Larger name */
-    font-weight: 800; /* Bolder */
+    font-size: 1.8em;
+    font-weight: 800;
     margin-bottom: 0.5rem;
     color: var(--primary-text);
     line-height: 1.2;
@@ -158,7 +158,7 @@ watch(() => props.isModalOpen, (newVal) => {
 }
 
 .modal-body {
-    flex-grow: 1; /* Allows body to take available space */
+    flex-grow: 1;
 }
 
 .episode-title {
@@ -177,7 +177,7 @@ watch(() => props.isModalOpen, (newVal) => {
     transform: translateX(-50%);
     width: 50px;
     height: 3px;
-    background-color: var(--accent-color); /* Underline accent */
+    background-color: var(--accent-color);
     border-radius: 2px;
 }
 
@@ -228,7 +228,7 @@ watch(() => props.isModalOpen, (newVal) => {
 /* Medium devices (tablets) */
 @media (min-width: 768px) {
     .modal-content {
-        max-width: 500px; /* Fixed max-width for better control */
+        max-width: 500px;
         padding: 2.5rem;
     }
 
@@ -250,7 +250,7 @@ watch(() => props.isModalOpen, (newVal) => {
 /* Large devices (desktops) */
 @media (min-width: 1024px) {
     .modal-content {
-        max-width: 550px; /* Slightly larger on desktops */
+        max-width: 550px;
     }
 }
 </style>
