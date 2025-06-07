@@ -43,12 +43,12 @@ export default {
 
             <div class="character-details">
                 <div class="detail-row">
-                    <span class="label">Especie:</span>
+                    <span class="label">Specie:</span>
                     <span class="value">{{ character.species }}</span>
                 </div>
 
                 <div class="detail-row">
-                    <span class="label">Género:</span>
+                    <span class="label">Gendre:</span>
                     <span class="value">{{ character.gender }}</span>
                 </div>
             </div>

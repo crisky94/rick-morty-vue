@@ -47,10 +47,6 @@ function handleUseHistoryTerm(term) {
     isHistoryVisible.value = false;
 }
 
-function handleOpenModal(character) {
-    emit('openModal', character);
-}
-
 function handleClearSearch() {
     localSearchQuery.value = '';
     isHistoryVisible.value = false;
