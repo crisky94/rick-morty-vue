@@ -48,7 +48,7 @@ export default {
                 </div>
 
                 <div class="detail-row">
-                    <span class="label">Gendre:</span>
+                    <span class="label">Gender:</span>
                     <span class="value">{{ character.gender }}</span>
                 </div>
             </div>
