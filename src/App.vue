@@ -237,6 +237,7 @@ body {
 @media (max-width: 480px) {
   .character-grid{
     margin-top: 250px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
 
